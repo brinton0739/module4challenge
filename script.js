@@ -22,7 +22,7 @@ const quiz = [
       "parenthesis",
       "square brackets"
     ],
-    correctAnswer: "curly brackets"
+    correctAnswer: "parenthesis"
   },
   {
     question: "Arrays in JavaScript can be used to store",
@@ -56,31 +56,128 @@ const quiz = [
   }
 ];
 
+const questionContent = `
+<div class="card">
+  <div class="card-header">
+    <h2 id="quiz-question"></h2>
+  </div>
+  <div class="card-body">
+    <button id="answer-a" class="btn"></button>
+    <button id="answer-b" class="btn"></button>
+    <button id="answer-c" class="btn"></button>
+    <button id="answer-d" class="btn"></button>
+  </div>
+  <div class="card-footer">
+    <h2 id="quiz-status"></h2>
+  </div>
+</div>`;
+
+const finalScore = `
+<div class="card">
+  <div class="card-header">
+    <h2>All Done!</h2>
+  </div>
+  <div class="card-body">
+    <p id="time"><p>
+    <form>
+      <label for="initials">Enter initials:</label>
+      <input type="text" id="initials" name="initials">
+      <input class="btn" type="submit" value="submit">
+    </form>
+  </div>
+  <div class="card-footer">
+    <h2 id="quiz-status"></h2>
+  </div>
+</div>`;
+
 // time variables
-let time = 75;
+let time = 0;
 
 const timeID = document.querySelector("#timeID")
+timeID.textContent = `Time: ${time}`;
 
 function timerCallback() {
   if (time >= 0) {
-    timeID.textContent = time;
+    timeID.textContent = `Time: ${time}`;
     time = time - 1;
   }
 }
 
-let timeout = setInterval(timerCallback, 1000)
+const quizContainer = document.querySelector("#question-card");
 
-// var generateBtn = document.querySelector("#generate");
+document.querySelector("#start-quiz").onclick = loadQuiz;
 
-// // Write password to the #password input
-// function writePassword() {
-//   var password = generatePassword();
-//   var passwordText = document.querySelector("#password");
+function loadQuiz() {
+  let i = 0;
+  let status = "";
+  time = 75;
+  let timeout = setInterval(timerCallback, 1000);
 
-//   passwordText.value = password;
+  quizContainer.innerHTML = questionContent;
 
-// }
+  const quizQuestion = document.querySelector("#quiz-question");
+  const quizButtonA = document.querySelector("#answer-a");
+  const quizButtonB = document.querySelector("#answer-b");
+  const quizButtonC = document.querySelector("#answer-c");
+  const quizButtonD = document.querySelector("#answer-d");
+  const quizStatus = document.querySelector("#quiz-status");
 
-// // Add event listener to generate button
-// generateBtn.addEventListener("click", writePassword);
+  quizButtonA.onclick = buttonEventHandler(0);
+  quizButtonB.onclick = buttonEventHandler(1);
+  quizButtonC.onclick = buttonEventHandler(2);
+  quizButtonD.onclick = buttonEventHandler(3);
+  
+  function buttonEventHandler(v) {
+    return function () {
+      if (quiz[i].answers[v] == quiz[i].correctAnswer) {
+        status = "Correct!";
+      } else {
+        status = "Incorrect!"
+        if ( time >= 15) {
+          time -= 15;
+        } else {
+          time = 0;
+        }
+      }
+      quizStatus.textContent = status
+      if (i < quiz.length -1) {
+        i++;
+        loadQuestion();
+      } else {
+        clearInterval(timeout);
+        quizContainer.innerHTML = finalScore;
+        timeID.textContent = `Time: ${time + 1}`;
+        const finalTime = document.querySelector("#time");
+        const finalStatus = document.querySelector("#quiz-status");
+
+        finalTime.textContent = `Your final score is ${time + 1}.`;
+        finalStatus.textContent = status;
+      }
+    }
+  }
+
+  function loadQuestion() {
+    quizQuestion.textContent = quiz[i].question;
+    quizButtonA.textContent = quiz[i].answers[0];
+    quizButtonB.textContent = quiz[i].answers[1];
+    quizButtonC.textContent = quiz[i].answers[2];
+    quizButtonD.textContent = quiz[i].answers[3];
+  }
+
+  loadQuestion();
+};
+
+function appendLocalStorage(initials, score) {
+  const highScores = localStorage.getItem('highScores');
+  let hs = [];
+  if (highScores != null) {
+    oldHighScores = JSON.parse(highScores);
+    hs = [...oldHighScores, {initials: initials, score: score}];
+  } else {
+    hs = [{initials: initials, score: score}];
+  }
+  localStorage.setItem['highScores', JSON.stringify(hs)]
+}
+
+
 

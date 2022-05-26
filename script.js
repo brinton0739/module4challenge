@@ -79,7 +79,7 @@ const finalScore = `
   </div>
   <div class="card-body">
     <p id="time"><p>
-    <form>
+    <form id="high-score-form">
       <label for="initials">Enter initials:</label>
       <input type="text" id="initials" name="initials">
       <input class="btn" type="submit" value="submit">
@@ -87,6 +87,21 @@ const finalScore = `
   </div>
   <div class="card-footer">
     <h2 id="quiz-status"></h2>
+  </div>
+</div>`;
+
+const highScoreTemplate = `
+<div class="card">
+  <div class="card-header">
+    <h2>High Scores</h2>
+  </div>
+  <div class="card-body">
+    <ul id="high-score-list">
+    </ul>
+    <button id="go-back" class="btn">Go back</button>
+    <button id="clear-high-scores" class="btn">Clear high scores</button>
+  </div>
+  <div class="card-footer">
   </div>
 </div>`;
 
@@ -103,8 +118,18 @@ function timerCallback() {
   }
 }
 
+function loadPage() {
+  quizContainer.innerHTML = `
+  <h1>Coding Quiz Challenge</h1>
+    <p>Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by 15 seconds!</p>
+    <button id="start-quiz" class="btn">Start Quiz?</button>`
+
+  document.querySelector("#start-quiz").onclick = loadQuiz;
+}
+
 const quizContainer = document.querySelector("#question-card");
 
+document.querySelector("#high-scores").onclick = loadHighScores;
 document.querySelector("#start-quiz").onclick = loadQuiz;
 
 function loadQuiz() {
@@ -146,11 +171,21 @@ function loadQuiz() {
       } else {
         clearInterval(timeout);
         quizContainer.innerHTML = finalScore;
-        timeID.textContent = `Time: ${time + 1}`;
+        const endTime = time + 1;
+        timeID.textContent = `Time: ${endTime}`;
         const finalTime = document.querySelector("#time");
         const finalStatus = document.querySelector("#quiz-status");
+        const finalForm = document.querySelector("#high-score-form");
 
-        finalTime.textContent = `Your final score is ${time + 1}.`;
+        finalForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const initials = finalForm.elements['initials'].value;
+          console.log(initials + ", " + endTime);
+          appendLocalStorage(initials, endTime);
+          loadHighScores();
+        });
+
+        finalTime.textContent = `Your final score is ${endTime}.`;
         finalStatus.textContent = status;
       }
     }
@@ -169,15 +204,33 @@ function loadQuiz() {
 
 function appendLocalStorage(initials, score) {
   const highScores = localStorage.getItem('highScores');
-  let hs = [];
+  let hs;
   if (highScores != null) {
     oldHighScores = JSON.parse(highScores);
     hs = [...oldHighScores, {initials: initials, score: score}];
   } else {
     hs = [{initials: initials, score: score}];
   }
-  localStorage.setItem['highScores', JSON.stringify(hs)]
+  console.log(JSON.stringify(hs));
+  localStorage.setItem('highScores', JSON.stringify(hs));
 }
 
+function clearLocalStorage() {
+  localStorage.removeItem('highScores');
+  loadHighScores();
+}
 
-
+function loadHighScores() {
+  quizContainer.innerHTML = highScoreTemplate;
+  document.querySelector("#go-back").onclick = loadPage;
+  document.querySelector("#clear-high-scores").onclick = clearLocalStorage;
+  const highScoreList = document.querySelector("#high-score-list");
+  const highScores = JSON.parse(localStorage.getItem('highScores'));
+  let highScoreListTemplate = "";
+  if (highScores != null) {
+    for (let i = 0; i < highScores.length; i++) {
+      highScoreListTemplate += `<li>Initials: ${highScores[i].initials}, Score: ${highScores[i].score}</li>`
+    }
+    highScoreList.innerHTML = highScoreListTemplate;
+  }
+}

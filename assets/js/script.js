@@ -57,11 +57,8 @@ const quiz = [
 ];
 
 const questionContent = `
-<div class="card">
-  <div class="card-header">
     <h2 id="quiz-question"></h2>
-  </div>
-  <div class="card-body">
+    <div class="card-body">
     <button id="answer-a" class="btn"></button>
     <button id="answer-b" class="btn"></button>
     <button id="answer-c" class="btn"></button>
@@ -69,32 +66,24 @@ const questionContent = `
   </div>
   <div class="card-footer">
     <h2 id="quiz-status"></h2>
-  </div>
-</div>`;
+  </div>`;
 
 const finalScore = `
-<div class="card">
-  <div class="card-header">
-    <h2>All Done!</h2>
-  </div>
-  <div class="card-body">
+   <h2>All Done!</h2>
+   <div class="card-body">
     <p id="time"><p>
     <form id="high-score-form">
       <label for="initials">Enter initials:</label>
       <input type="text" id="initials" name="initials">
       <input class="btn" type="submit" value="submit">
     </form>
-  </div>
+    </div>
   <div class="card-footer">
     <h2 id="quiz-status"></h2>
-  </div>
-</div>`;
+  </div>`;
 
 const highScoreTemplate = `
-<div class="card">
-  <div class="card-header">
-    <h2>High Scores</h2>
-  </div>
+  <h2>High Scores</h2>
   <div class="card-body">
     <ul id="high-score-list">
     </ul>
@@ -102,8 +91,7 @@ const highScoreTemplate = `
     <button id="clear-high-scores" class="btn">Clear high scores</button>
   </div>
   <div class="card-footer">
-  </div>
-</div>`;
+  </div>`;
 
 // time variables
 let time = 0;
@@ -229,7 +217,7 @@ function loadHighScores() {
   let highScoreListTemplate = "";
   if (highScores != null) {
     for (let i = 0; i < highScores.length; i++) {
-      highScoreListTemplate += `<li>Initials: ${highScores[i].initials}, Score: ${highScores[i].score}</li>`
+      highScoreListTemplate += `<li> ${highScores[i].initials} -  ${highScores[i].score}</li>`
     }
     highScoreList.innerHTML = highScoreListTemplate;
   }

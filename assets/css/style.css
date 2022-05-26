@@ -14,7 +14,7 @@ body,
 
 body {
   font-family: sans-serif;
-  background-color: #ffff;
+  background-color: rgb(97, 142, 184);
 }
 
 .wrapper {
@@ -25,15 +25,32 @@ body {
 
 header {
   text-align: center;
-  padding: 20px;
+  padding: 40px;
   padding-top: 0px;
   color: hsl(73, 75%, 55%);
+
 }
-header a {
-  text-align: center;
+
+header h1 {
+  text-align: right;
   font-family: sans-serif;
   text-decoration: none;
-  color:rgb(238, 25, 43);
+  color: #1e90ff;
+  position:absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 18px;
+  font-weight: normal;
+
+}
+header a {
+  text-align: left;
+  font-family: sans-serif;
+  text-decoration: none;
+  color:#1e90ff;
+  position:absolute;
+  top: 1rem;
+  left: 1rem;
 }
 .card {
   background-color: hsl(0, 0%, 100%);
@@ -45,6 +62,8 @@ header a {
   margin: 0 auto;
   max-width: 800px;
   padding: 30px 40px;
+  position: relative;
+  top: 7rem;
 }
 
 .card-header::after {
@@ -79,20 +98,27 @@ header a {
 
 .btn {
   border: none;
-  background-color: hsl(360, 91%, 36%);
+  background-color: #6bb2fa;
   border-radius: 25px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 6px 0px rgba(0, 0, 0, 0.2) 0px 1px 1px
     0px;
   color: hsl(0, 0%, 100%);
-  display: inline-block;
-  font-size: 22px;
-  line-height: 22px;
+  display: block;
+  font-size: 18px;
+  line-height: 18px;
+  width:100%;
   margin: 16px 16px 16px 20px;
-  padding: 14px 34px;
+  padding: 8px 8px;
+  margin-top:.05rem;
   text-align: center;
   cursor: pointer;
 }
 
+.btn:active {
+
+  background: color #000;
+
+}
 button[disabled] {
   cursor: default;
   background: #c0c7cf;
@@ -123,6 +149,30 @@ button[disabled] {
   overflow: hidden;
 }
 
+h2 {
+
+  margin-bottom: 1em;
+}
+
+label {
+  margin-bottom: 1em;
+}
+
+input {
+  margin-bottom: 1em;
+}
+
+p {
+
+  margin-bottom: 1em;
+}
+
+li {
+  margin-bottom: .1em;
+  background-color:  #c9e9f8;
+  ;
+}
+
 @media (max-width: 690px) {
   .btn {
     font-size: 1rem;
@@ -130,9 +180,7 @@ button[disabled] {
     padding: 10px 15px;
   }
 
-  #password {
-    font-size: 1rem;
-  }
+ 
 }
 
 @media (max-width: 500px) {
